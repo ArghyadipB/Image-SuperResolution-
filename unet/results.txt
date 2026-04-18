@@ -1,0 +1,22 @@
+Epoch 1 | Train Loss: 0.1603, PSNR: 14.60, SSIM: 0.6422 | Val Loss: 0.1328, PSNR: 16.40, SSIM: 0.7990
+Epoch 2 | Train Loss: 0.0970, PSNR: 19.68, SSIM: 0.9258 | Val Loss: 0.0848, PSNR: 21.84, SSIM: 0.9528
+Epoch 3 | Train Loss: 0.0739, PSNR: 21.74, SSIM: 0.9584 | Val Loss: 0.0679, PSNR: 23.53, SSIM: 0.9681
+Epoch 4 | Train Loss: 0.0626, PSNR: 22.56, SSIM: 0.9681 | Val Loss: 0.0588, PSNR: 24.61, SSIM: 0.9765
+Epoch 5 | Train Loss: 0.0552, PSNR: 23.56, SSIM: 0.9743 | Val Loss: 0.0539, PSNR: 25.43, SSIM: 0.9804
+Epoch 6 | Train Loss: 0.0517, PSNR: 23.72, SSIM: 0.9750 | Val Loss: 0.0500, PSNR: 25.69, SSIM: 0.9815
+Epoch 7 | Train Loss: 0.0489, PSNR: 23.83, SSIM: 0.9770 | Val Loss: 0.0475, PSNR: 26.21, SSIM: 0.9838
+Epoch 8 | Train Loss: 0.0466, PSNR: 24.24, SSIM: 0.9790 | Val Loss: 0.0457, PSNR: 26.52, SSIM: 0.9854
+Epoch 9 | Train Loss: 0.0451, PSNR: 24.55, SSIM: 0.9799 | Val Loss: 0.0446, PSNR: 26.47, SSIM: 0.9844
+Epoch 10 | Train Loss: 0.0440, PSNR: 24.50, SSIM: 0.9806 | Val Loss: 0.0431, PSNR: 26.85, SSIM: 0.9860
+Epoch 11 | Train Loss: 0.0422, PSNR: 25.18, SSIM: 0.9824 | Val Loss: 0.0425, PSNR: 26.97, SSIM: 0.9864
+Epoch 12 | Train Loss: 0.0434, PSNR: 24.00, SSIM: 0.9788 | Val Loss: 0.0421, PSNR: 26.53, SSIM: 0.9855
+Epoch 13 | Train Loss: 0.0413, PSNR: 24.85, SSIM: 0.9818 | Val Loss: 0.0410, PSNR: 27.17, SSIM: 0.9870
+Epoch 14 | Train Loss: 0.0403, PSNR: 25.27, SSIM: 0.9832 | Val Loss: 0.0405, PSNR: 27.11, SSIM: 0.9869
+Epoch 15 | Train Loss: 0.0401, PSNR: 24.79, SSIM: 0.9820 | Val Loss: 0.0411, PSNR: 27.10, SSIM: 0.9872
+Epoch 16 | Train Loss: 0.0393, PSNR: 25.23, SSIM: 0.9832 | Val Loss: 0.0396, PSNR: 27.11, SSIM: 0.9868
+Epoch 17 | Train Loss: 0.0394, PSNR: 24.79, SSIM: 0.9819 | Val Loss: 0.0394, PSNR: 27.37, SSIM: 0.9883
+Epoch 18 | Train Loss: 0.0393, PSNR: 24.48, SSIM: 0.9810 | Val Loss: 0.0395, PSNR: 26.63, SSIM: 0.9864
+Epoch 19 | Train Loss: 0.0372, PSNR: 25.60, SSIM: 0.9845 | Val Loss: 0.0384, PSNR: 27.61, SSIM: 0.9882
+Epoch 20 | Train Loss: 0.0374, PSNR: 25.16, SSIM: 0.9832 | Val Loss: 0.0386, PSNR: 27.38, SSIM: 0.9875
+
+Test → Loss: 0.0454, PSNR: 27.06, SSIM: 0.9870

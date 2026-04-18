@@ -1,0 +1,21 @@
+dataset:
+  root: dataset_sr
+  batch_size: 16
+  val_split: 0.8
+
+training:
+  epochs: 20
+  lr: 0.0003
+
+loss:
+  perceptual_weight: 0.006
+  adversarial_weight: 0.001
+  pixel_weight: 1.0
+
+system:
+  device: auto
+  seed: 42
+
+save:
+  gen_path: saved_models/generator.pth
+  disc_path: saved_models/discriminator.pth
