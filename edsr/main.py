@@ -1,7 +1,14 @@
+"""
+EDSR-Based Super-Resolution Training Pipeline
+
+This script trains, evaluates, and visualizes an Enhanced Deep Super-Resolution
+(EDSR) model using a combination of pixel, perceptual, and edge-based losses.
+The pipeline is designed for consistent experimentation and fair comparison
+with other models such as UNet and GAN.
+"""
 import sys
 import os
 
-# allow import from project root
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import torch
@@ -10,21 +17,17 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, random_split, Subset
 from torchvision.transforms import v2
 
-# shared modules
 from dataset import SRDataset
 from utils import load_config, get_device, save_model
 from visualize import visualize_results
 
-# edsr modules
 from edsr.model import EDSR
 from edsr.loss import VGGPerceptualLoss, edge_loss
 from edsr.train import train_model
 from edsr.test import test_model
 
 
-# =========================
 # CONFIG
-# =========================
 base_dir = os.path.dirname(__file__)
 root_dir = os.path.abspath(os.path.join(base_dir, ".."))
 
@@ -39,9 +42,7 @@ torch.manual_seed(config["system"]["seed"])
 scale = config["model"]["scale"]
 
 
-# =========================
 # DATA
-# =========================
 dataset_root = os.path.join(root_dir, config["dataset"]["root"])
 
 transform = v2.Compose([
@@ -64,9 +65,7 @@ val_dataset_full = SRDataset(
 )
 
 
-# =========================
 #  FIXED SPLIT (SHARED)
-# =========================
 split_path = os.path.join(root_dir, "split_indices.pt")
 
 if not os.path.exists(split_path):
@@ -99,9 +98,7 @@ else:
 print(f"Val size: {len(val_dataset)}, Test size: {len(test_dataset)}")
 
 
-# =========================
 # LOADERS
-# =========================
 train_loader = DataLoader(
     train_dataset,
     batch_size=config["dataset"]["batch_size"],
@@ -120,17 +117,13 @@ test_loader = DataLoader(
 )
 
 
-# =========================
 # DEBUG (RUN ONCE)
-# =========================
 lr, hr = next(iter(train_loader))
 print("LR shape:", lr.shape)
 print("HR shape:", hr.shape)
 
 
-# =========================
 # MODEL
-# =========================
 model = EDSR(
             scale=scale,
             n_resblocks=config["model"]["n_resblocks"],
@@ -151,16 +144,12 @@ lambda_perc = config["loss"]["lambda_perc"]
 lambda_edge = config["loss"]["lambda_edge"]
 
 
-# =========================
 # LOG FILE
-# =========================
 log_file = os.path.join(base_dir, "results.txt")
 open(log_file, "w").close()
 
 
-# =========================
 # TRAIN
-# =========================
 train_model(
     model,
     train_loader,
@@ -178,9 +167,7 @@ train_model(
 )
 
 
-# =========================
 # TEST
-# =========================
 test_model(
     model,
     test_loader,
@@ -190,15 +177,11 @@ test_model(
 )
 
 
-# =========================
 # VISUALIZE
-# =========================
 visualize_results(model, test_loader, device)
 
 
-# =========================
 # SAVE MODEL
-# =========================
 save_path = os.path.join(base_dir, config["save"]["path"])
 save_model(model, save_path)
 

@@ -1,8 +1,14 @@
+"""
+Model Evaluation (Testing) for Super-Resolution
+
+This module evaluates a trained super-resolution model on a test dataset.
+It computes quantitative metrics and logs the performance for analysis.
+"""
 import torch
 from utils import psnr, ssim
 import matplotlib.pyplot as plt
 
-
+# TEST FUNCTION
 def test_model(model, test_loader, mse, vgg_loss, perc_weight, device, log_file):
     model.eval()
     test_loss = test_psnr = test_ssim = 0

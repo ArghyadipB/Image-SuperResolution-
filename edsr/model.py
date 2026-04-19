@@ -1,10 +1,16 @@
+"""
+Enhanced Deep Super-Resolution (EDSR) Model
+
+This module implements the EDSR architecture for single-image super-resolution.
+EDSR improves upon traditional residual networks by removing unnecessary
+normalization layers and using residual scaling for stable training.
+"""
+
 import torch
 import torch.nn as nn
 
 
-# =========================
 # MEAN SHIFT
-# =========================
 class MeanShift(nn.Conv2d):
     def __init__(self, sign=-1):
         super().__init__(3, 3, kernel_size=1)
@@ -22,9 +28,7 @@ class MeanShift(nn.Conv2d):
             p.requires_grad = False
 
 
-# =========================
 # RESIDUAL BLOCK (with scaling)
-# =========================
 class ResidualBlock(nn.Module):
     def __init__(self, channels, res_scale=0.1):
         super().__init__()
@@ -41,9 +45,7 @@ class ResidualBlock(nn.Module):
         return x + self.block(x) * self.res_scale
 
 
-# =========================
 # UPSAMPLER (PixelShuffle)
-# =========================
 class Upsampler(nn.Sequential):
     def __init__(self, scale, channels):
         m = []
@@ -63,9 +65,7 @@ class Upsampler(nn.Sequential):
         super().__init__(*m)
 
 
-# =========================
 # EDSR MODEL
-# =========================
 class EDSR(nn.Module):
     def __init__(self, scale=2, n_resblocks=16, n_feats=64, res_scale=0.1):
         super().__init__()

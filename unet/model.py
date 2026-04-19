@@ -1,10 +1,16 @@
+"""
+UNet-Based Super-Resolution Model with PixelShuffle Upsampling
+
+This module implements a UNet architecture adapted for image super-resolution.
+It combines encoder–decoder skip connections with a PixelShuffle-based output
+layer to efficiently upscale low-resolution images.
+"""
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# =========================
+
 # DOUBLE CONV BLOCK
-# =========================
 class DoubleConv(nn.Module):
     def __init__(self, in_c, out_c):
         super().__init__()
@@ -21,9 +27,7 @@ class DoubleConv(nn.Module):
         return self.net(x)
 
 
-# =========================
 # UNET WITH PIXELSHUFFLE
-# =========================
 class UNET(nn.Module):
     def __init__(self, scale_factor=2):
         super().__init__()
@@ -49,9 +53,7 @@ class UNET(nn.Module):
             self.ups.append(nn.ConvTranspose2d(f * 2, f, 2, 2))
             self.ups.append(DoubleConv(f * 2, f))
 
-        # =========================
         # 🔥 PIXELSHUFFLE HEAD
-        # =========================
         self.final = nn.Sequential(
             nn.Conv2d(features[0], 3 * (self.scale ** 2), kernel_size=3, padding=1),
             nn.PixelShuffle(self.scale)
@@ -81,7 +83,5 @@ class UNET(nn.Module):
 
             x = self.ups[i + 1](torch.cat([skip, x], dim=1))
 
-        # =========================
         # OUTPUT (UPSCALED)
-        # =========================
         return torch.sigmoid(self.final(x))

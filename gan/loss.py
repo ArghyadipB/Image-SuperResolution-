@@ -1,3 +1,11 @@
+"""
+VGG-Based Perceptual Loss for Super-Resolution
+
+This module implements a perceptual loss using a pretrained VGG19 network.
+Unlike pixel-wise losses (e.g., MSE or L1), perceptual loss compares images
+in a high-level feature space, enabling better reconstruction of textures
+and fine details in super-resolution tasks.
+"""
 import torch
 import torch.nn as nn
 from torchvision.models import vgg19, VGG19_Weights

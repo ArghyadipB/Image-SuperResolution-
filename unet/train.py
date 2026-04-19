@@ -1,10 +1,18 @@
+"""
+Training Loop for Super-Resolution Models
+
+This module implements the training and validation pipeline for
+super-resolution models such as UNet, GAN, or EDSR. It optimizes the model
+using a combination of pixel-wise and perceptual losses, while tracking
+quantitative metrics during training.
+"""
 import torch
 from utils import psnr, ssim
 
 def train_model(model, train_loader, val_loader, optimizer, mse, vgg_loss, perc_weight, device, epochs, log_file):
 
     for epoch in range(epochs):
-        # ================= TRAIN =================
+        # TRAIN
         model.train()
         train_loss = train_psnr = train_ssim = 0
 
@@ -24,7 +32,7 @@ def train_model(model, train_loader, val_loader, optimizer, mse, vgg_loss, perc_
             train_psnr += psnr(sr, hr_img).item()
             train_ssim += ssim(sr, hr_img).item()
 
-        # ================= VALIDATION =================
+        # VALIDATION
         model.eval()
         val_loss = val_psnr = val_ssim = 0
 

@@ -1,7 +1,13 @@
+"""
+GAN-Based Super-Resolution Model Evaluation (Testing)
+
+This module evaluates a trained GAN-based super-resolution model on a test dataset.
+It computes overall loss, individual loss components, and image quality metrics.
+"""
 import torch
 from utils import psnr, ssim
 
-
+# TEST FUNCTION
 def test_model(
     gen,
     disc,
@@ -13,7 +19,7 @@ def test_model(
     adv_weight,
     perc_weight,
     pixel_weight,
-    log_file   # 🔥 NEW
+    log_file 
 ):
     gen.eval()
 
@@ -49,7 +55,7 @@ def test_model(
 
     n = len(test_loader)
 
-    # ================= FORMAT =================
+    # FORMAT
     test_line = (
         f"\nTest → Loss: {test_loss/n:.4f}, "
         f"PSNR: {test_psnr/n:.2f}, "
@@ -59,9 +65,9 @@ def test_model(
         f"Pixel: {test_pixel/n:.4f}"
     )
 
-    # ================= PRINT =================
+    # PRINT
     print(test_line)
 
-    # ================= SAVE =================
+    # SAVE
     with open(log_file, "a") as f:
         f.write(test_line + "\n")

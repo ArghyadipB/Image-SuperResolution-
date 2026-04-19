@@ -1,9 +1,15 @@
+"""
+Loss Functions for Super-Resolution (Perceptual + Edge)
+
+This module defines loss functions used to train super-resolution models,
+focusing on both perceptual quality and structural sharpness.
+"""
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.models import vgg19, VGG19_Weights
 
-
+# vgg los and edge loss
 class VGGPerceptualLoss(nn.Module):
     def __init__(self):
         super().__init__()

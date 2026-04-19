@@ -1,9 +1,17 @@
+"""
+Super-Resolution Dataset Loader
+
+This dataset class is designed for training and evaluating super-resolution
+models such as EDSR, GAN-based models, and UNet. It supports two different
+data-loading strategies depending on the model type.
+"""
 import os
 from PIL import Image
 from torch.utils.data import Dataset
 from torchvision.transforms import v2
 
 
+# DATASET CLASS
 class SRDataset(Dataset):
     def __init__(
         self,
@@ -28,19 +36,12 @@ class SRDataset(Dataset):
         hr = Image.open(
             os.path.join(self.hr_path, self.hr_imgs[idx])
         ).convert("RGB")
-
-        # =========================
-        # 🔥 CASE 1: EDSR (generate LR)
-        # =========================
         if self.scale > 1:
             lr = hr.resize(
                 (hr.width // self.scale, hr.height // self.scale),
                 Image.BICUBIC
             )
         else:
-            # =========================
-            # CASE 2: UNet / GAN
-            # =========================
             lr = Image.open(
                 os.path.join(self.lr_path, self.lr_imgs[idx])
             ).convert("RGB")

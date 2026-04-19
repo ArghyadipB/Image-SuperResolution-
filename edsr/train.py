@@ -1,3 +1,10 @@
+"""
+EDSR Training Loop with Pixel, Perceptual, and Edge Losses
+
+This module implements the training and validation pipeline for an EDSR-based
+super-resolution model. It optimizes image reconstruction quality using a
+combination of pixel-level, perceptual, and edge-aware losses.
+"""
 from utils import psnr, ssim
 import torch
 
@@ -42,7 +49,7 @@ def train_model(
             train_psnr += psnr(sr, hr).item()
             train_ssim += ssim(sr, hr).item()
 
-        # ===== VALIDATION =====
+        # VALIDATION
         model.eval()
         val_loss = val_psnr = val_ssim = 0
 

@@ -1,14 +1,21 @@
+"""
+Utility Functions for Super-Resolution Pipeline
+
+This module provides helper functions used across training and inference
+for super-resolution models such as EDSR, GAN, and UNet. It includes
+configuration loading, device management, model saving, and evaluation metrics.
+"""
 import os
 import yaml
 import torch
 import torch.nn.functional as F
 
-
+# CONFIG LOAD
 def load_config(path):
     with open(path, "r") as f:
         return yaml.safe_load(f)
 
-
+# DEVICE
 def get_device(device_str):
     if device_str == "auto":
         return "cuda" if torch.cuda.is_available() else "cpu"
@@ -21,14 +28,14 @@ def get_device(device_str):
     else:
         raise ValueError("Invalid device")
 
-
+# MODEL SAVE
 def save_model(model, path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     torch.save(model.state_dict(), path)
     print(f"Model saved at {path}")
 
 
-# ===== METRICS =====
+# METRICS
 def psnr(pred, target):
     mse = F.mse_loss(pred, target)
     return 20 * torch.log10(1.0 / torch.sqrt(mse))

@@ -1,3 +1,11 @@
+"""
+GAN-Based Super-Resolution Training Loop
+
+This module implements the training and validation pipeline for a GAN-based
+super-resolution model. It jointly trains a Generator and Discriminator using
+a combination of adversarial, perceptual, and pixel-wise losses.
+"""
+
 import torch
 from utils import psnr, ssim
 
@@ -17,11 +25,11 @@ def train_model(
     adv_weight,
     perc_weight,
     pixel_weight,
-    log_file   # 🔥 NEW
+    log_file
 ):
     for epoch in range(epochs):
 
-        # ================= TRAIN =================
+        # TRAIN
         gen.train()
         disc.train()
 
@@ -39,7 +47,7 @@ def train_model(
 
             fake = gen(lr)
 
-            # ===== DISCRIMINATOR =====
+            # DISCRIMINATOR
             real_out = disc(hr)
             fake_out = disc(fake.detach())
 
@@ -50,7 +58,7 @@ def train_model(
             loss_d.backward()
             opt_d.step()
 
-            # ===== GENERATOR =====
+            # GENERATOR
             fake_out = disc(fake)
 
             adv_loss = adv_weight * bce(fake_out, torch.ones_like(fake_out))
@@ -63,7 +71,7 @@ def train_model(
             loss_g.backward()
             opt_g.step()
 
-            # ===== METRICS =====
+            # METRICS
             train_loss += loss_g.item()
             train_psnr += psnr(fake, hr).item()
             train_ssim += ssim(fake, hr).item()
@@ -72,7 +80,7 @@ def train_model(
             train_perc += perc_loss.item()
             train_pixel += pixel_loss.item()
 
-        # ================= VALIDATION =================
+        # VALIDATION
         gen.eval()
 
         val_loss = 0
@@ -105,7 +113,7 @@ def train_model(
                 val_perc += perc_loss.item()
                 val_pixel += pixel_loss.item()
 
-        # ================= FORMAT LOGS =================
+        # FORMAT LOGS
         n_train = len(train_loader)
         n_val = len(val_loader)
 
@@ -129,11 +137,11 @@ def train_model(
             f"Pixel: {val_pixel/n_val:.4f}"
         )
 
-        # ================= PRINT =================
+        # PRINT
         print(train_line)
         print(val_line)
 
-        # ================= SAVE TO FILE =================
+        # SAVE TO FILE
         with open(log_file, "a") as f:
             f.write(train_line + "\n")
             f.write(val_line + "\n")

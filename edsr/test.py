@@ -1,3 +1,9 @@
+"""
+EDSR Model Evaluation (Testing)
+
+This module evaluates a trained EDSR super-resolution model on a test dataset.
+It computes reconstruction loss and image quality metrics, and logs the results.
+"""
 from utils import psnr, ssim
 import torch
 

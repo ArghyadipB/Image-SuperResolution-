@@ -1,7 +1,17 @@
+"""
+Visualization Utility for Super-Resolution Results
+
+This module provides a helper function to visually compare the performance
+of super-resolution models such as EDSR, GAN, and UNet. It displays
+Low-Resolution (LR), Super-Resolved (SR), and High-Resolution (HR) images
+side by side for qualitative evaluation.
+"""
+
+
 import torch
 import matplotlib.pyplot as plt
 
-
+# VISUALIZE FUNCTION
 def visualize_results(model, loader, device, num_images=3):
     model.eval()
 

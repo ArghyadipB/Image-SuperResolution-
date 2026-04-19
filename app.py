@@ -1,34 +1,34 @@
+"""
+Interactive Super-Resolution Web Application (Gradio)
+
+This script builds an interactive web interface using Gradio to perform
+image super-resolution with three different models: UNet, GAN, and EDSR.
+It allows users to upload Low-Resolution (LR) and/or High-Resolution (HR)
+images and visualize the model outputs along with evaluation metrics.
+"""
 import torch
 import gradio as gr
 import numpy as np
 from PIL import Image
 from torchvision.transforms import v2
 
-# =========================
 # IMPORT MODELS
-# =========================
 from unet.model import UNET
 from gan.model.generator import Generator
 from edsr.model import EDSR
 from utils import get_device, psnr, ssim, load_config
 
-# =========================
 # DEVICE
-# =========================
 device = get_device("auto")
 print("Using device:", device)
 
-# =========================
 # TRANSFORM
-# =========================
 transform = v2.Compose([
     v2.ToImage(),
     v2.ToDtype(torch.float32, scale=True),
 ])
 
-# =========================
 # LOAD MODELS
-# =========================
 # UNET
 unet_model = UNET().to(device)
 unet_model.load_state_dict(torch.load("./unet/saved_models/unet_sr.pth", map_location=device))
@@ -65,14 +65,10 @@ def load_edsr():
 edsr_model = load_edsr()
 edsr_model.eval()
 
-# =========================
 # CORE FUNCTION
-# =========================
 def run_inference(model_name, lr_img_np, hr_img_np):
 
-    # =========================
     # VALIDATION
-    # =========================
     if lr_img_np is None and hr_img_np is None:
         return None, None, "Upload at least one image"
 
@@ -80,18 +76,14 @@ def run_inference(model_name, lr_img_np, hr_img_np):
     lr_img = Image.fromarray(lr_img_np.astype("uint8")) if lr_img_np is not None else None
     hr_img = Image.fromarray(hr_img_np.astype("uint8")) if hr_img_np is not None else None
 
-    # =========================
     # FORCE 256x256 INPUT
-    # =========================
     if lr_img is not None:
         lr_img = lr_img.resize((256, 256), Image.BICUBIC)
 
     if hr_img is not None:
         hr_img = hr_img.resize((256, 256), Image.BICUBIC)
 
-    # =========================
     # CREATE 128x128 INPUT
-    # =========================
     if lr_img is not None:
         input_128 = lr_img.resize((128, 128), Image.BICUBIC)
     else:
@@ -99,14 +91,10 @@ def run_inference(model_name, lr_img_np, hr_img_np):
 
     display_128 = input_128
 
-    # =========================
     # PREPROCESS
-    # =========================
     lr_tensor = transform(input_128).unsqueeze(0).to(device)
 
-    # =========================
     # INFERENCE (GPU)
-    # =========================
     with torch.no_grad():
         if model_name == "UNet":
             sr_tensor = unet_model(lr_tensor)
@@ -117,9 +105,7 @@ def run_inference(model_name, lr_img_np, hr_img_np):
 
     sr_tensor_gpu = sr_tensor  # keep on GPU for metrics
 
-    # =========================
     # METRICS (ONLY IF HR EXISTS)
-    # =========================
     psnr_val, ssim_val = None, None
 
     if hr_img is not None:
@@ -129,23 +115,17 @@ def run_inference(model_name, lr_img_np, hr_img_np):
             psnr_val = psnr(sr_tensor_gpu, hr_tensor)
             ssim_val = ssim(sr_tensor_gpu, hr_tensor)
 
-    # =========================
     # MOVE TO CPU FOR DISPLAY
-    # =========================
     sr_tensor = sr_tensor.squeeze(0).cpu()
 
-    # =========================
     # CONVERT TO IMAGE
-    # =========================
     sr_img = (sr_tensor.permute(1, 2, 0).numpy() * 255).clip(0, 255).astype("uint8")
     sr_img = Image.fromarray(sr_img)
 
     # ensure SR output is 256x256
     sr_img = sr_img.resize((256, 256), Image.BICUBIC)
 
-    # =========================
     # FORMAT OUTPUT
-    # =========================
     display_128 = np.array(display_128)
     sr_img = np.array(sr_img)
 
@@ -157,9 +137,7 @@ def run_inference(model_name, lr_img_np, hr_img_np):
     return display_128, sr_img, metrics_text
 
 
-# =========================
 # GRADIO UI
-# =========================
 with gr.Blocks() as demo:
 
     gr.Markdown("# 🔬 Super Resolution App")
@@ -188,8 +166,6 @@ with gr.Blocks() as demo:
         outputs=[lr_display, sr_output, metrics_output]
     )
 
-# =========================
 # LAUNCH
-# =========================
 if __name__ == "__main__":
     demo.launch()
